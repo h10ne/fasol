@@ -7,15 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavAction
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.fasol.*
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.registration.*
-import kotlinx.coroutines.awaitAll
 import kotlinx.serialization.ImplicitReflectionSerializer
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,8 +38,8 @@ class Registration : Fragment(R.layout.registration) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tbLogin = v.findViewById(R.id.number)
-        tbPassword = v.findViewById(R.id.tbPassword)
-        tbUserName = v.findViewById(R.id.username)
+        tbPassword = v.findViewById(R.id.Password)
+        tbUserName = v.findViewById(R.id.userName)
 
 
         button_done.setOnClickListener {
@@ -65,7 +61,7 @@ class Registration : Fragment(R.layout.registration) {
                     }
                     else if(response.code() == 400)
                     {
-                        Toast.makeText(context, "Аккаунт с таким номером уже сущкесвуте!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Аккаунт с таким номером уже существует!", Toast.LENGTH_SHORT).show()
                     }
                     else
                     {
@@ -124,7 +120,7 @@ class Registration : Fragment(R.layout.registration) {
                     context?.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
                         ?.edit()?.putString("user", response.body()?.toJson())!!.apply()
 
-                    var bundle = Bundle()
+                    val bundle = Bundle()
                     bundle.putString("Username", "$fname $lname")
                     bundle.putString("Phone", tbLogin.text.toString())
                     //val action = RegistrationDirections.actionRegistrationToProfileAuth()
@@ -142,4 +138,3 @@ class Registration : Fragment(R.layout.registration) {
         })
     }
 }
-

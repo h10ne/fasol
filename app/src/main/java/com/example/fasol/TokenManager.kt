@@ -1,5 +1,3 @@
-package com.example.fasol
-
 import android.annotation.SuppressLint
 import android.content.Context
 
@@ -21,6 +19,7 @@ object TokenManager {
                 .getString("accesstoken", "")!!
 
         }
+        @SuppressLint("CommitPrefEdits")
         set(value) {
             field = value
             context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
@@ -41,14 +40,14 @@ object TokenManager {
                 .getString("refreshtoken", "")!!
 
         }
+        @SuppressLint("CommitPrefEdits")
         set(value) {
             field = value
             context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
                 .edit().putString("refreshtoken", value)!!.apply()
         }
 
-    private fun updateToken()
-    {
+    private fun updateToken() {
 
     }
 

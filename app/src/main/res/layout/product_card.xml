@@ -4,6 +4,8 @@
     android:layout_width="180dp"
     android:layout_height="238dp"
     android:layout_margin="16dp"
+    android:padding="5dp"
+    android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="14dp">
 
 
@@ -32,8 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/product_price"
-            android:textSize="20sp"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

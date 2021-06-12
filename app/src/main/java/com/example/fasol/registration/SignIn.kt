@@ -1,5 +1,6 @@
 package com.example.fasol.registration
 
+import TokenManager
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.navigation.navGraphViewModels
 import com.example.fasol.*
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.registration.*
 import kotlinx.android.synthetic.main.sign_in.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import retrofit2.Call
@@ -29,10 +27,10 @@ class SignIn : Fragment(R.layout.sign_in) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var v = inflater.inflate(R.layout.sign_in, container, false)
+        val v = inflater.inflate(R.layout.sign_in, container, false)
 
         login = v.findViewById(R.id.number)
-        password = v.findViewById(R.id.password)
+        password = v.findViewById(R.id.Password)
 
         return v
     }
@@ -41,7 +39,7 @@ class SignIn : Fragment(R.layout.sign_in) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button_sign_in.setOnClickListener{
+        button_sign_in.setOnClickListener {
             DoLogin()
         }
 
@@ -53,23 +51,27 @@ class SignIn : Fragment(R.layout.sign_in) {
 
     @ImplicitReflectionSerializer
     private fun DoLogin() {
-        RetrofitClient.instance.getToken(PhonePasswordModel("8" + login.text.toString(), password.text.toString())).enqueue(object :
+        RetrofitClient.instance.getToken(
+            PhonePasswordModel(
+                "8" + login.text.toString(),
+                password.text.toString()
+            )
+        ).enqueue(object :
             Callback<TokenResponce> {
 
             override fun onResponse(call: Call<TokenResponce>, response: Response<TokenResponce>) {
-                if(response.code() == 200)
-                {
+                if (response.code() == 200) {
                     TokenManager.AccessToken = response.body()?.access!!
                     TokenManager.RefreshToken = response.body()?.refresh!!
                     GetUser()
-                }
-                else if(response.code() == 401)
-                {
+                } else if (response.code() == 401) {
                     Toast.makeText(context, "Неверный логин или пароль!", Toast.LENGTH_SHORT).show()
-                }
-                else
-                {
-                    Toast.makeText(context, "Что-то пошло не так! ${response.code()} ${response.message()}\"", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Что-то пошло не так! ${response.code()} ${response.message()}\"",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -79,23 +81,22 @@ class SignIn : Fragment(R.layout.sign_in) {
         })
     }
 
-    fun GetUser()
-    {
+    fun GetUser() {
         RetrofitClient.instance.getUser("Bearer " + TokenManager.AccessToken).enqueue(object :
-            Callback<User>
-        {
+            Callback<User> {
 
             override fun onResponse(call: Call<User>, response: Response<User>) {
-                if(response.code() == 200)
-                {
+                if (response.code() == 200) {
                     context?.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
                         ?.edit()?.putString("user", response.body()?.toJson())!!.apply()
                     val action = SignInDirections.actionSignInToProfileAuth()
                     findNavController().navigate(action)
-                }
-                else
-                {
-                    Toast.makeText(context, "Что-то пошло не так! ${response.code()} ${response.message()}\"", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Что-то пошло не так! ${response.code()} ${response.message()}\"",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 

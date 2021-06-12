@@ -1,26 +1,38 @@
 package com.example.fasol.subcategories
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fasol.R
-import com.example.fasol.Subcategory
-import kotlinx.android.synthetic.main.category_card.view.*
-import kotlinx.android.synthetic.main.category_card.view.Category_Title
-import kotlinx.android.synthetic.main.fragment_subcategories.view.*
+import com.example.fasol.SubcategoryModel
 import kotlinx.android.synthetic.main.subcategory_card.view.*
 
-class SubcategoryAdapter(private val list: ArrayList<Subcategory>) :
+class SubcategoryAdapter(private val list: ArrayList<SubcategoryModel>) :
     RecyclerView.Adapter<SubcategoryAdapter.SubcategoryViewHolder>() {
 
     inner class SubcategoryViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
-        fun bind(subcategory: Subcategory) {
+        private var name = ""
+        private var subcatId = 0
+
+        fun bind(subcategory: SubcategoryModel) {
             with(itemView) {
-                Category_Title.text = subcategory.category
+                name = subcategory.name
+                subcatId = subcategory.id
                 Subcategory_Title.text = subcategory.name
+            }
+        }
+
+        init {
+            itemView.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putInt("subcatId", subcatId)
+                bundle.putString("name", name)
+                itemView.findNavController().navigate(R.id.products, bundle)
             }
         }
     }

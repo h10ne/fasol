@@ -1,20 +1,19 @@
-package com.example.fasol
+package com.example.fasol.basket
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import com.example.fasol.R
 
-class MainFragment : Fragment() {
-    private lateinit var communicator: Communicator
+class Basket : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = inflater.inflate(R.layout.fragment_main, container, false)
-
-        return v
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_basket, container, false)
     }
 }
