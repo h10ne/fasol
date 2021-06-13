@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fasol.*
-import com.squareup.picasso.Callback
+import com.example.fasol.Category
+import com.example.fasol.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.category_card.view.*
-import retrofit2.Call
-import retrofit2.Response
 
 class CategoryAdapter(
     private val list: ArrayList<Category>,
@@ -23,8 +20,9 @@ class CategoryAdapter(
     inner class PostViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private var categoryId: Int = 0
-        private lateinit var categoryName:String
+        private lateinit var categoryName: String
         private val context = itemView.context
+
         fun bind(category: Category) {
             with(itemView) {
                 categoryId = category.id
@@ -35,7 +33,7 @@ class CategoryAdapter(
         }
 
         init {
-            itemView.setOnClickListener(){
+            itemView.setOnClickListener() {
                 val bundle = Bundle()
                 bundle.putInt("categoryId", categoryId)
                 bundle.putString("name", categoryName)

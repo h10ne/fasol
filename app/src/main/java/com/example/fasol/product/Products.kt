@@ -4,12 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fasol.*
+import com.example.fasol.ProductFromAll
+import com.example.fasol.ProductsModel
+import com.example.fasol.R
+import com.example.fasol.RetrofitClient
+import kotlinx.android.synthetic.main.fragment_products.*
 import retrofit2.Call
 import retrofit2.Response
 
@@ -17,6 +23,7 @@ class Products : Fragment(R.layout.fragment_products) {
 
     private lateinit var title: TextView
     private lateinit var recycle: RecyclerView
+    private lateinit var basketWidget: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,13 +31,20 @@ class Products : Fragment(R.layout.fragment_products) {
         savedInstanceState: Bundle?
     ): View? {
         val v = inflater.inflate(R.layout.fragment_products, container, false)
+
         title = v.findViewById(R.id.subcategory_Title)
         recycle = v.findViewById(R.id.products_view)
+        basketWidget = v.findViewById(R.id.basket_widget)
+
+        basketWidget.setOnClickListener {
+            basketClick()
+        }
+
         if (arguments != null) {
             val bundle = requireArguments()
             title.text = bundle.getString("name")
 
-            RetrofitClient.instance.getProducts(bundle.getInt("subcatId"))
+            RetrofitClient.instance.getProducts(bundle.getString("name")!!)
                 .enqueue(object : retrofit2.Callback<ProductsModel> {
 
                     override fun onResponse(
@@ -39,7 +53,10 @@ class Products : Fragment(R.layout.fragment_products) {
                     ) {
                         if (response.code() == 200) {
                             val adapter =
-                                ProductAdapter(response.body()?.results as ArrayList<ProductFromAll>, parentFragmentManager)
+                                ProductAdapter(
+                                    response.body()?.results as ArrayList<ProductFromAll>,
+                                    parentFragmentManager
+                                )
                             recycle.adapter = adapter
 
                             recycle.setHasFixedSize(true)
@@ -56,10 +73,7 @@ class Products : Fragment(R.layout.fragment_products) {
                     override fun onFailure(call: Call<ProductsModel>, t: Throwable) {
                         Toast.makeText(context, "Что-то пошло не так!", Toast.LENGTH_SHORT)
                     }
-
                 })
-
-
         }
 
         return v
@@ -67,5 +81,15 @@ class Products : Fragment(R.layout.fragment_products) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        button_product_back.setOnClickListener {
+            val action = ProductsDirections.actionProductsToSubcategoriesFragment(this.id)
+            findNavController().navigate(action)
+        }
+    }
+
+    private fun basketClick()
+    {
+        findNavController().navigate(R.id.basket)
     }
 }

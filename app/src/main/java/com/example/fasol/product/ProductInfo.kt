@@ -1,20 +1,17 @@
 package com.example.fasol.product
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import com.example.fasol.ProfileManager
 import com.example.fasol.R
 import com.example.fasol.authorization.OrdersEmptyDirections
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.orders_empty.*
+import kotlinx.android.synthetic.main.product_info.*
 import kotlinx.android.synthetic.main.profile.*
-import org.w3c.dom.Text
 
 class ProductInfo: BottomSheetDialogFragment() {
 
@@ -23,8 +20,19 @@ class ProductInfo: BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = inflater.inflate(R.layout.product_info, container, false)
+        return inflater.inflate(R.layout.product_info, container, false)
+    }
 
-        return v
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (!ProfileManager.isUserExist()){
+            button_add.visibility = View.INVISIBLE
+            product_info_condition.visibility = View.VISIBLE
+        }else{
+            product_info_condition.visibility = View.INVISIBLE
+            button_add.visibility = View.VISIBLE
+        }
+
     }
 }
