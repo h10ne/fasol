@@ -8,7 +8,7 @@ import com.google.gson.Gson
 object ProfileManager {
     lateinit var context: Context
     private lateinit var user: User
-
+    private var wasCleared = true
 
     fun isUserExist(): Boolean {
         val smth = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
@@ -16,11 +16,12 @@ object ProfileManager {
     }
 
     public fun getCurrentUser(): User {
-        if (!this::user.isInitialized) {
+        if (!this::user.isInitialized || wasCleared) {
             if (isUserExist()) {
                 val userStr = context?.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE)
                     ?.getString("user", "")
                 user = Gson().fromJson(userStr, User::class.java)
+                wasCleared = false
             }
         }
         return user
@@ -29,5 +30,6 @@ object ProfileManager {
     public fun Clear() {
         context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE).edit().remove("user")
             .apply()
+        wasCleared = true
     }
 }

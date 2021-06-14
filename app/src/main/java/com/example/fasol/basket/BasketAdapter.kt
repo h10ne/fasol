@@ -11,9 +11,6 @@ import com.example.fasol.*
 import com.example.fasol.Products
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.basket_card.view.*
-import kotlinx.android.synthetic.main.product_card.product_price
-import kotlinx.android.synthetic.main.product_card.view.*
-import kotlinx.android.synthetic.main.product_info.*
 import retrofit2.Call
 import retrofit2.Response
 
@@ -191,6 +188,11 @@ class BasketAdapter(
         init {
 
         }
+    }
+
+    fun clearItems() {
+        list.clear()
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasketViewHolder =

@@ -68,6 +68,12 @@ interface Api {
     @GET("api/orders/")
     fun getOrders(@Header("Authorization") Authorization: String): Call<List<OrderModel>>
 
-    @GET("api/orders/order-create/")
+    @POST("api/orders/order-create/")
     fun createOrder(@Header("Authorization") Authorization: String, @Body createOrder:CreateOrderModel): Call<CreateOrderModel>
+
+    @DELETE("api/orders/{id}")
+    fun removeOrder(
+        @Header("Authorization") Authorization: String,
+        @Path("id") id: Long
+    ): Call<Void>
 }

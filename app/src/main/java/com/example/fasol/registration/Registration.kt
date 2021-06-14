@@ -108,7 +108,7 @@ class Registration : Fragment(R.layout.registration) {
         var lname = ""
         if(fullName.size > 1)
             lname =  tbUserName.text.toString().split(" ")[1]
-        val user = UserWithoutId("8" + tbLogin.text.toString(), fname, lname, "")
+        val user = UserWithoutId("8" + tbLogin.text.toString(), tbPassword.text.toString(), fname, lname, "")
 
         RetrofitClient.instance.changeUsername(user, "Bearer " + TokenManager.AccessToken).enqueue(object :
             Callback<User>

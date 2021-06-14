@@ -41,6 +41,7 @@ data class TokenResponce(
 
 data class UserWithoutId(
     @SerializedName("phone") var phone: String,
+    @SerializedName("password") var password: String,
     @SerializedName("first_name") var firstName: String,
     @SerializedName("last_name") var lastName: String,
     @SerializedName("address") var address: String
@@ -177,4 +178,9 @@ data class CreateOrderModel (
     @SerializedName("address") var address : String,
     @SerializedName("buying_type") var buyingType : String,
     @SerializedName("comment") var comment : String
+)
+
+data class OneBasketInOrder(
+    val name:String,
+    val moreInfo:String
 )

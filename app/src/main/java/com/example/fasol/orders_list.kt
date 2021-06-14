@@ -1,4 +1,4 @@
-package com.example.fasol.authorization
+package com.example.fasol
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,30 +8,26 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.fasol.*
-import kotlinx.android.synthetic.main.orders_empty.*
+import androidx.recyclerview.widget.RecyclerView
+import com.example.fasol.authorization.OrdersAdapter
 import retrofit2.Call
 import retrofit2.Response
-import javax.security.auth.callback.Callback
 
-class OrdersEmpty : Fragment(R.layout.orders_empty) {
-
+class orders_list : Fragment() {
+    private lateinit var recycle : RecyclerView
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = inflater.inflate(R.layout.orders_empty, container, false)
+        // Inflate the layout for this fragment
+        val v =  inflater.inflate(R.layout.fragment_orders_list, container, false)
 
-        if(ProfileManager.isUserExist())
-            CheckOrdersExist()
+        recycle = v.findViewById(R.id.OrdersView)
+        recycle.setHasFixedSize(true)
+        recycle.layoutManager =
+            GridLayoutManager(requireContext(), 1)
 
-        return v
-    }
-
-    private fun CheckOrdersExist()
-    {
         RetrofitClient.instance.getOrders("Bearer " + TokenManager.AccessToken).enqueue(object :
             retrofit2.Callback<List<OrderModel>> {
 
@@ -39,7 +35,7 @@ class OrdersEmpty : Fragment(R.layout.orders_empty) {
                 if (response.code() == 200) {
                     if(response.body()!!.isNotEmpty())
                     {
-                        findNavController().navigate(R.id.orders_list)
+                        recycle.adapter = OrdersAdapter(response.body()!! as ArrayList<OrderModel>)
                     }
                 }
             }
@@ -48,16 +44,7 @@ class OrdersEmpty : Fragment(R.layout.orders_empty) {
                 Toast.makeText(context, "Что-то пошло не так!", Toast.LENGTH_SHORT).show()
             }
         })
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        if (!ProfileManager.isUserExist())
-            findNavController().navigate(R.id.profile_navigation)
-
-        button_go_main.setOnClickListener {
-            findNavController().navigate(R.id.main_navigation)
-        }
+        return v
     }
 }
