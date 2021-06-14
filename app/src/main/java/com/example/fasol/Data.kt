@@ -180,6 +180,11 @@ data class CreateOrderModel (
     @SerializedName("comment") var comment : String
 )
 
+data class ChangeOrderModel(
+    @SerializedName("status") var status : String,
+)
+
+
 data class OneBasketInOrder(
     val name:String,
     val moreInfo:String

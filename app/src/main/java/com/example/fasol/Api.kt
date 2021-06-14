@@ -76,4 +76,10 @@ interface Api {
         @Header("Authorization") Authorization: String,
         @Path("id") id: Long
     ): Call<Void>
+
+    @PATCH("api/orders/{id}")
+    fun changeStatusOrder(
+        @Header("Authorization") Authorization: String,
+        @Body body:ChangeOrderModel
+    ): Call<ChangeOrderModel>
 }

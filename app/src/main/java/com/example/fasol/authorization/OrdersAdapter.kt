@@ -5,14 +5,9 @@ import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fasol.*
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.basket_card.view.*
 import kotlinx.android.synthetic.main.ready_order_card.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,7 +41,7 @@ class OrdersAdapter(
                 }
 
                 remove_order_btn.setOnClickListener {
-                    removeOrder(order.id)
+                    changeStatusOrder(order.id)
                 }
 
                 itemView.setOnClickListener {
@@ -68,7 +63,26 @@ class OrdersAdapter(
             }
         }
 
-        private fun removeOrder(id: Int) {
+        private fun changeStatusOrder(id: Int) {
+
+            RetrofitClient.instance.changeStatusOrder("Bearer " + TokenManager.AccessToken, ChangeOrderModel("cancelled")).enqueue(object :Callback<ChangeOrderModel>
+            {
+                override fun onResponse(call: Call<ChangeOrderModel>, response: Response<ChangeOrderModel>) {
+                    if(response.code() == 200)
+                    {
+                        removeOrder(id)
+                    }
+                }
+
+                override fun onFailure(call: Call<ChangeOrderModel>, t: Throwable) {
+                    val ue = 0
+                }
+
+            })
+        }
+
+        private fun removeOrder(id:Int)
+        {
             RetrofitClient.instance.removeOrder("Bearer " + TokenManager.AccessToken, id.toLong()).enqueue(object :Callback<Void>
             {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -80,6 +94,7 @@ class OrdersAdapter(
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
+                    val ue = 0
                 }
 
             })
