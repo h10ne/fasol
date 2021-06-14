@@ -65,10 +65,10 @@ class OrdersAdapter(
 
         private fun changeStatusOrder(id: Int) {
 
-            RetrofitClient.instance.changeStatusOrder("Bearer " + TokenManager.AccessToken, ChangeOrderModel("cancelled")).enqueue(object :Callback<ChangeOrderModel>
+            RetrofitClient.instance.changeStatusOrder("Bearer " + TokenManager.AccessToken, ChangeOrderModel("cancelled"), id.toLong()).enqueue(object :Callback<ChangeOrderModel>
             {
                 override fun onResponse(call: Call<ChangeOrderModel>, response: Response<ChangeOrderModel>) {
-                    if(response.code() == 200)
+                    if(response.code() == 202)
                     {
                         removeOrder(id)
                     }

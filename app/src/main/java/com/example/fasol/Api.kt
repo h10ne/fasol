@@ -80,6 +80,7 @@ interface Api {
     @PATCH("api/orders/{id}")
     fun changeStatusOrder(
         @Header("Authorization") Authorization: String,
-        @Body body:ChangeOrderModel
+        @Body body:ChangeOrderModel,
+        @Path("id") id: Long
     ): Call<ChangeOrderModel>
 }
